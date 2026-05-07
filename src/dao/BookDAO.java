@@ -11,13 +11,11 @@ public class BookDAO {
     // CREATE TABLE
     public void createTable() {
 
-        String sql =
-                "CREATE TABLE IF NOT EXISTS books (" +
+        String sql = "CREATE TABLE IF NOT EXISTS books (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "title TEXT NOT NULL," +
                 "author TEXT NOT NULL," +
-                "status TEXT DEFAULT 'Available'," +
-                "issueDate TEXT)";
+                "status TEXT DEFAULT 'Available')";
 
         try (Connection conn = DBConnection.connect();
              Statement stmt = conn.createStatement()) {
@@ -62,10 +60,12 @@ public class BookDAO {
     public void addBook(String title, String author) {
 
         String sql =
-                "INSERT INTO books(title, author, status) VALUES (?, ?, 'Available')";
+                "INSERT INTO books(title, author, status) " +
+                "VALUES (?, ?, 'Available')";
 
         try (Connection conn = DBConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps =
+                     conn.prepareStatement(sql)) {
 
             ps.setString(1, title);
             ps.setString(2, author);
@@ -80,11 +80,11 @@ public class BookDAO {
     // DELETE BOOK
     public void deleteBook(int id) {
 
-        String sql =
-                "DELETE FROM books WHERE id=?";
+        String sql = "DELETE FROM books WHERE id = ?";
 
         try (Connection conn = DBConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps =
+                     conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
@@ -99,16 +99,13 @@ public class BookDAO {
     public void issueBook(int id) {
 
         String sql =
-                "UPDATE books SET status='Issued', issueDate=? WHERE id=?";
+                "UPDATE books SET status = 'Issued' WHERE id = ?";
 
         try (Connection conn = DBConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps =
+                     conn.prepareStatement(sql)) {
 
-            String today =
-                    java.time.LocalDate.now().toString();
-
-            ps.setString(1, today);
-            ps.setInt(2, id);
+            ps.setInt(1, id);
 
             ps.executeUpdate();
 
@@ -117,94 +114,95 @@ public class BookDAO {
         }
     }
 
-    // RETURN BOOK + FINE
-    public long returnBook(int id) {
+    // RETURN BOOK
+    public void returnBook(int id) {
 
-        long fine = 0;
+        String sql =
+                "UPDATE books SET status = 'Available' WHERE id = ?";
 
-        try (Connection conn = DBConnection.connect()) {
-
-            String getSql =
-                    "SELECT issueDate FROM books WHERE id=?";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(getSql);
+        try (Connection conn = DBConnection.connect();
+             PreparedStatement ps =
+                     conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
-            ResultSet rs = ps.executeQuery();
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // TOTAL BOOKS
+    public int getTotalBooks() {
+
+        int count = 0;
+
+        String sql = "SELECT COUNT(*) FROM books";
+
+        try (Connection conn = DBConnection.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
 
-                String issueDate =
-                        rs.getString("issueDate");
-
-                if (issueDate != null) {
-
-                    java.time.LocalDate issue =
-                            java.time.LocalDate.parse(issueDate);
-
-                    java.time.LocalDate today =
-                            java.time.LocalDate.now();
-
-                    long days =
-                            java.time.temporal.ChronoUnit.DAYS
-                                    .between(issue, today);
-
-                    if (days > 7) {
-
-                        fine = (days - 7) * 5;
-                    }
-                }
+                count = rs.getInt(1);
             }
-
-            String updateSql =
-                    "UPDATE books SET status='Available', issueDate=NULL WHERE id=?";
-
-            PreparedStatement ps2 =
-                    conn.prepareStatement(updateSql);
-
-            ps2.setInt(1, id);
-
-            ps2.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return fine;
+        return count;
     }
 
-    // SEARCH BOOKS
-    public ObservableList<Book> searchBooks(String keyword) {
+    // ISSUED BOOKS COUNT
+    public int getIssuedBooksCount() {
 
-        ObservableList<Book> list =
-                FXCollections.observableArrayList();
+        int count = 0;
 
         String sql =
-                "SELECT * FROM books WHERE title LIKE ?";
+                "SELECT COUNT(*) FROM books " +
+                "WHERE status='Issued'";
 
         try (Connection conn = DBConnection.connect();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-            ps.setString(1, "%" + keyword + "%");
+            if (rs.next()) {
 
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                list.add(new Book(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        rs.getString("status")
-                ));
+                count = rs.getInt(1);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return list;
+        return count;
+    }
+
+    // AVAILABLE BOOKS COUNT
+    public int getAvailableBooksCount() {
+
+        int count = 0;
+
+        String sql =
+                "SELECT COUNT(*) FROM books " +
+                "WHERE status='Available'";
+
+        try (Connection conn = DBConnection.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+
+                count = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
     }
 }

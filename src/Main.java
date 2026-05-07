@@ -1,7 +1,11 @@
+import dao.BookDAO;
+import dao.StudentDAO;
+import dao.IssueDAO;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -9,21 +13,22 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root =
-                FXMLLoader.load(
-                        getClass().getResource("/view/login.fxml"));
+        // CREATE DATABASE TABLES
+        new BookDAO().createTable();
+        new StudentDAO().createStudentTable();
+        new IssueDAO().createIssueTable();
 
-        Scene scene =
-                new Scene(root, 400, 300);
+        // LOAD LOGIN PAGE
+        Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
 
-        stage.setTitle("Library Login");
+        Scene scene = new Scene(root);
 
+        stage.setTitle("Library Management System");
         stage.setScene(scene);
-
         stage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

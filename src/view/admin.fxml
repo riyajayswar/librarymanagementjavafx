@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.AdminController"
+            stylesheets="@style.css"
+            prefWidth="1400"
+            prefHeight="850"
+            style="-fx-background-color:#f1f5f9;">
+
+    <!-- TOP NAVBAR -->
+    <top>
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="20"
+              style="-fx-background-color:#0f172a;
+                     -fx-padding:18;">
+
+            <Label text="Library Management Dashboard"
+                   style="-fx-text-fill:white;
+                          -fx-font-size:28;
+                          -fx-font-weight:bold;" />
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="Logout"
+                    onAction="#handleLogout"
+                    style="-fx-background-color:#ef4444;
+                           -fx-text-fill:white;
+                           -fx-background-radius:10;
+                           -fx-font-weight:bold;" />
+
+        </HBox>
+
+    </top>
+
+    <!-- SIDEBAR -->
+    <left>
+
+        <VBox spacing="20"
+              prefWidth="250"
+              style="-fx-background-color:#1e293b;
+                     -fx-padding:25;">
+
+            <Label text="ADMIN PANEL"
+                   style="-fx-text-fill:white;
+                          -fx-font-size:24;
+                          -fx-font-weight:bold;" />
+
+            <Separator />
+
+            <Button text="Dashboard"
+                    style="-fx-background-color:#2563eb;
+                           -fx-text-fill:white;
+                           -fx-background-radius:10;
+                           -fx-pref-height:45;
+                           -fx-font-size:15;" />
+
+            <Button text="Manage Books"
+                    style="-fx-background-color:#334155;
+                           -fx-text-fill:white;
+                           -fx-background-radius:10;
+                           -fx-pref-height:45;
+                           -fx-font-size:15;" />
+
+            <Button text="Students"
+                    style="-fx-background-color:#334155;
+                           -fx-text-fill:white;
+                           -fx-background-radius:10;
+                           -fx-pref-height:45;
+                           -fx-font-size:15;" />
+
+            <Button text="Issued Books"
+                    style="-fx-background-color:#334155;
+                           -fx-text-fill:white;
+                           -fx-background-radius:10;
+                           -fx-pref-height:45;
+                           -fx-font-size:15;" />
+
+        </VBox>
+
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+
+        <ScrollPane fitToWidth="true"
+                    style="-fx-background:#f1f5f9;
+                           -fx-background-color:#f1f5f9;">
+
+            <content>
+
+                <VBox spacing="25">
+
+                    <padding>
+                        <Insets top="25"
+                                right="25"
+                                bottom="25"
+                                left="25"/>
+                    </padding>
+
+                    <!-- DASHBOARD CARDS -->
+                    <HBox spacing="20">
+
+                        <!-- TOTAL BOOKS -->
+                        <VBox spacing="10"
+                              prefWidth="250"
+                              style="-fx-background-color:white;
+                                     -fx-background-radius:20;
+                                     -fx-padding:20;
+                                     -fx-effect:
+                                     dropshadow(gaussian,
+                                     rgba(0,0,0,0.1),
+                                     10,0,0,4);">
+
+                            <Label text="Total Books"
+                                   style="-fx-font-size:18;
+                                          -fx-text-fill:#64748b;" />
+
+                            <Label fx:id="totalBooksLabel"
+                                   text="0"
+                                   style="-fx-font-size:36;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#2563eb;" />
+
+                        </VBox>
+
+                        <!-- ISSUED BOOKS -->
+                        <VBox spacing="10"
+                              prefWidth="250"
+                              style="-fx-background-color:white;
+                                     -fx-background-radius:20;
+                                     -fx-padding:20;
+                                     -fx-effect:
+                                     dropshadow(gaussian,
+                                     rgba(0,0,0,0.1),
+                                     10,0,0,4);">
+
+                            <Label text="Issued Books"
+                                   style="-fx-font-size:18;
+                                          -fx-text-fill:#64748b;" />
+
+                            <Label fx:id="issuedBooksLabel"
+                                   text="0"
+                                   style="-fx-font-size:36;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#f59e0b;" />
+
+                        </VBox>
+
+                        <!-- AVAILABLE BOOKS -->
+                        <VBox spacing="10"
+                              prefWidth="250"
+                              style="-fx-background-color:white;
+                                     -fx-background-radius:20;
+                                     -fx-padding:20;
+                                     -fx-effect:
+                                     dropshadow(gaussian,
+                                     rgba(0,0,0,0.1),
+                                     10,0,0,4);">
+
+                            <Label text="Available"
+                                   style="-fx-font-size:18;
+                                          -fx-text-fill:#64748b;" />
+
+                            <Label fx:id="availableBooksLabel"
+                                   text="0"
+                                   style="-fx-font-size:36;
+                                          -fx-font-weight:bold;
+                                          -fx-text-fill:#22c55e;" />
+
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- BOOK MANAGEMENT -->
+                    <VBox spacing="20"
+                          style="-fx-background-color:white;
+                                 -fx-background-radius:20;
+                                 -fx-padding:25;
+                                 -fx-effect:
+                                 dropshadow(gaussian,
+                                 rgba(0,0,0,0.08),
+                                 10,0,0,4);">
+
+                        <Label text="Book Management"
+                               style="-fx-font-size:24;
+                                      -fx-font-weight:bold;
+                                      -fx-text-fill:#0f172a;" />
+
+                        <!-- SEARCH BAR -->
+                        <HBox spacing="15">
+
+                            <TextField fx:id="searchField"
+                                       promptText="Search books..."
+                                       prefWidth="300"
+                                       style="-fx-background-radius:12;
+                                              -fx-padding:10;" />
+
+                            <Button text="Search"
+                                    onAction="#handleSearch"
+                                    style="-fx-background-color:#2563eb;
+                                           -fx-text-fill:white;
+                                           -fx-font-weight:bold;
+                                           -fx-background-radius:12;" />
+
+                        </HBox>
+
+                        <!-- ADD BOOK FORM -->
+                        <HBox spacing="15">
+
+                            <TextField fx:id="titleField"
+                                       promptText="Enter Book Title"
+                                       prefWidth="250"
+                                       style="-fx-background-radius:12;
+                                              -fx-padding:10;" />
+
+                            <TextField fx:id="authorField"
+                                       promptText="Enter Author Name"
+                                       prefWidth="250"
+                                       style="-fx-background-radius:12;
+                                              -fx-padding:10;" />
+
+                            <Button text="Add Book"
+                                    onAction="#handleAddBook"
+                                    style="-fx-background-color:#2563eb;
+                                           -fx-text-fill:white;
+                                           -fx-font-weight:bold;
+                                           -fx-background-radius:12;" />
+
+                            <Button text="Delete Selected"
+                                    onAction="#handleDeleteBook"
+                                    style="-fx-background-color:#ef4444;
+                                           -fx-text-fill:white;
+                                           -fx-font-weight:bold;
+                                           -fx-background-radius:12;" />
+
+                        </HBox>
+
+                        <!-- BOOK TABLE -->
+                        <TableView fx:id="bookTable"
+                                   prefHeight="350">
+
+                            <columns>
+
+                                <TableColumn fx:id="idColumn"
+                                             text="ID"
+                                             prefWidth="100"/>
+
+                                <TableColumn fx:id="titleColumn"
+                                             text="Book Title"
+                                             prefWidth="320"/>
+
+                                <TableColumn fx:id="authorColumn"
+                                             text="Author"
+                                             prefWidth="250"/>
+
+                                <TableColumn fx:id="statusColumn"
+                                             text="Status"
+                                             prefWidth="180"/>
+
+                            </columns>
+
+                        </TableView>
+
+                    </VBox>
+
+                    <!-- ISSUED BOOKS SECTION -->
+                    <VBox spacing="20"
+                          style="-fx-background-color:white;
+                                 -fx-background-radius:20;
+                                 -fx-padding:25;
+                                 -fx-effect:
+                                 dropshadow(gaussian,
+                                 rgba(0,0,0,0.08),
+                                 10,0,0,4);">
+
+                        <Label text="Issued Books"
+                               style="-fx-font-size:24;
+                                      -fx-font-weight:bold;
+                                      -fx-text-fill:#0f172a;" />
+
+                        <TableView fx:id="issueTable"
+                                   prefHeight="300">
+
+                            <columns>
+
+                                <TableColumn fx:id="studentColumn"
+                                             text="Student"
+                                             prefWidth="180"/>
+
+                                <TableColumn fx:id="bookColumn"
+                                             text="Book"
+                                             prefWidth="250"/>
+
+                                <TableColumn fx:id="issueDateColumn"
+                                             text="Issue Date"
+                                             prefWidth="180"/>
+
+                                <TableColumn fx:id="dueDateColumn"
+                                             text="Due Date"
+                                             prefWidth="180"/>
+
+                                <TableColumn fx:id="fineColumn"
+                                             text="Fine"
+                                             prefWidth="120"/>
+
+                            </columns>
+
+                        </TableView>
+
+                    </VBox>
+
+                </VBox>
+
+            </content>
+
+        </ScrollPane>
+
+    </center>
+
+</BorderPane>

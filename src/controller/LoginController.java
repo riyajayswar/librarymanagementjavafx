@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,46 +17,67 @@ public class LoginController {
     private PasswordField passwordField;
 
     @FXML
+    private ComboBox<String> roleBox;
+
+    @FXML
+    private Label messageLabel;
+
+    @FXML
+    public void initialize() {
+
+        roleBox.setItems(FXCollections.observableArrayList(
+                "Admin",
+                "Student"
+        ));
+
+        roleBox.setValue("Student");
+    }
+
+    @FXML
     private void handleLogin() {
 
         String username = usernameField.getText();
         String password = passwordField.getText();
+        String role = roleBox.getValue();
 
-        if (username.equals("admin")
-                && password.equals("1234")) {
+        try {
 
-            try {
+            // ADMIN LOGIN
+            if(username.equals("admin")
+                    && password.equals("admin123")
+                    && role.equals("Admin")) {
 
-                Parent root =
-                        FXMLLoader.load(
-                                getClass().getResource("/view/books.fxml"));
+                Parent root = FXMLLoader.load(
+                        getClass().getResource("/view/admin.fxml"));
 
-                Stage stage = new Stage();
-
-                stage.setTitle("Library Management System");
+                Stage stage = (Stage) usernameField.getScene().getWindow();
 
                 stage.setScene(new Scene(root));
-
+                stage.setTitle("Admin Dashboard");
                 stage.show();
-
-                // CLOSE LOGIN WINDOW
-                Stage current =
-                        (Stage) usernameField.getScene().getWindow();
-
-                current.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
-        } else {
+            // STUDENT LOGIN
+            else if(username.equals("student")
+                    && password.equals("student123")
+                    && role.equals("Student")) {
 
-            Alert alert =
-                    new Alert(Alert.AlertType.ERROR);
+                Parent root = FXMLLoader.load(
+                        getClass().getResource("/view/student.fxml"));
 
-            alert.setContentText("Invalid Username or Password");
+                Stage stage = (Stage) usernameField.getScene().getWindow();
 
-            alert.show();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Student Dashboard");
+                stage.show();
+            }
+
+            else {
+                messageLabel.setText("Invalid Credentials!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
