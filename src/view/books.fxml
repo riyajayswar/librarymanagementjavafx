@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.BookController">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15;">
+
+            <Label text="Library Management System"
+                   style="-fx-font-size: 24px;
+                          -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+
+                <TextField fx:id="searchField"
+                           promptText="Search Book"/>
+
+                <Button text="Search"
+                        onAction="#handleSearch"/>
+
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="bookTable">
+
+            <columns>
+
+                <TableColumn fx:id="colId"
+                             text="ID"
+                             prefWidth="80"/>
+
+                <TableColumn fx:id="colTitle"
+                             text="Title"
+                             prefWidth="220"/>
+
+                <TableColumn fx:id="colAuthor"
+                             text="Author"
+                             prefWidth="200"/>
+
+                <TableColumn fx:id="colStatus"
+                             text="Status"
+                             prefWidth="150"/>
+
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+
+        <VBox spacing="10"
+              style="-fx-padding: 15;">
+
+            <HBox spacing="10">
+
+                <TextField fx:id="titleField"
+                           promptText="Book Title"/>
+
+                <TextField fx:id="authorField"
+                           promptText="Author"/>
+
+            </HBox>
+
+            <HBox spacing="10">
+
+                <Button text="Add Book"
+                        onAction="#handleAddBook"/>
+
+                <Button text="Delete Book"
+                        onAction="#handleDeleteBook"/>
+
+                <Button text="Issue Book"
+                        onAction="#handleIssueBook"/>
+
+                <Button text="Return Book"
+                        onAction="#handleReturnBook"/>
+
+            </HBox>
+
+        </VBox>
+
+    </bottom>
+
+</BorderPane>

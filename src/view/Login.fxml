@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.LoginController"
+      alignment="CENTER"
+      spacing="15"
+      style="-fx-padding: 40;
+             -fx-background-color: #f4f4f4;">
+
+    <Label text="Library Login"
+           style="-fx-font-size: 28px;
+                  -fx-font-weight: bold;" />
+
+    <TextField fx:id="usernameField"
+               promptText="Username"
+               maxWidth="250"/>
+
+    <PasswordField fx:id="passwordField"
+                   promptText="Password"
+                   maxWidth="250"/>
+
+    <Button text="Login"
+            onAction="#handleLogin"
+            style="-fx-font-size: 14px;" />
+
+</VBox>
