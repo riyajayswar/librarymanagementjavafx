@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Book;
 import model.Issue;
@@ -399,20 +400,198 @@ public class StudentController {
     // LOAD STUDENT PROFILE
     private void loadStudentProfile() {
 
-    studentIdLabel.setText(
-            String.valueOf(
-                    Session.getStudentId()
-            )
-    );
+        studentIdLabel.setText(
+                String.valueOf(
+                        Session.getStudentId()
+                )
+        );
 
 
-    studentNameLabel.setText(
-            Session.getUsername()
-    );
+        studentNameLabel.setText(
+                Session.getUsername()
+        );
 
 
-    studentEmailLabel.setText(
-            Session.getEmail()
-    );
-}
+        studentEmailLabel.setText(
+                Session.getEmail()
+        );
+    }
+
+    //EDIT PROFILE BUTTON
+    @FXML
+    private void handleEditProfile(){
+
+
+        Dialog<ButtonType> dialog =
+                new Dialog<>();
+
+        dialog.setTitle("Edit Profile");
+
+
+        GridPane grid =
+                new GridPane();
+
+        grid.setHgap(10);
+        grid.setVgap(15);
+
+
+        TextField nameField =
+                new TextField(studentNameLabel.getText());
+
+
+        TextField emailField =
+                new TextField(studentEmailLabel.getText());
+
+
+        PasswordField oldPasswordField =
+                new PasswordField();
+
+        oldPasswordField.setPromptText("Current Password");
+
+
+        PasswordField newPasswordField =
+                new PasswordField();
+
+        newPasswordField.setPromptText("New Password");
+
+
+        grid.add(new Label("Name:"),0,0);
+
+        grid.add(nameField,1,0);
+
+
+        grid.add(new Label("Email:"),0,1);
+
+        grid.add(emailField,1,1);
+
+
+        grid.add(new Label("Current Password:"),0,2);
+
+        grid.add(oldPasswordField,1,2);
+
+
+        grid.add(new Label("New Password:"),0,3);
+
+        grid.add(newPasswordField,1,3);
+
+
+
+        dialog.getDialogPane()
+                .setContent(grid);
+
+
+
+        ButtonType save =
+                new ButtonType(
+                        "Save",
+                        ButtonBar.ButtonData.OK_DONE
+                );
+
+
+        dialog.getDialogPane()
+                .getButtonTypes()
+                .addAll(save, ButtonType.CANCEL);
+
+
+
+        dialog.showAndWait()
+                .ifPresent(result -> {
+
+
+                if(result == save){
+
+
+                String oldPass =
+                        oldPasswordField.getText();
+
+
+                String newPass =
+                        newPasswordField.getText();
+
+
+                Student student =
+                        studentDAO.getStudentById(
+                                Session.getStudentId()
+                        );
+
+
+                String finalPassword =
+                        student.getPassword();
+
+
+
+                if(!newPass.isEmpty()){
+
+
+                        boolean valid =
+                                studentDAO.checkPassword(
+                                        Session.getStudentId(),
+                                        oldPass
+                                );
+
+
+                        if(!valid){
+
+                                showAlert(
+                                "Old password is incorrect!"
+                                );
+
+                                return;
+                        }
+
+
+                        finalPassword = newPass;
+
+                }
+
+
+
+                studentDAO.updateStudent(
+
+                        Session.getStudentId(),
+
+                        nameField.getText(),
+
+                        emailField.getText(),
+
+                        finalPassword
+
+                );
+
+
+
+                studentNameLabel.setText(
+                        nameField.getText()
+                );
+
+
+                studentEmailLabel.setText(
+                        emailField.getText()
+                );
+
+
+
+                Session.setStudent(
+
+                        Session.getStudentId(),
+
+                        nameField.getText(),
+
+                        emailField.getText()
+
+                );
+
+                loadStudentProfile();
+
+
+
+                showAlert(
+                        "Profile Updated Successfully!"
+                );
+
+                }
+
+        });
+
+    }
 }

@@ -204,4 +204,111 @@ public class StudentDAO {
         return null;
 
     }
+    // UPDATE STUDENT PROFILE
+    public void updateStudent(int id,
+                          String name,
+                          String email,
+                          String password) {
+
+
+        String sql =
+                "UPDATE students SET name=?, email=?, password=? WHERE id=?";
+
+
+        try(Connection conn = DBConnection.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+
+
+            ps.setString(1, name);
+
+            ps.setString(2, email);
+
+            ps.setString(3, password);
+
+            ps.setInt(4, id);
+
+
+            ps.executeUpdate();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    //new
+    public Student getStudentById(int id){
+
+        String sql =
+                "SELECT * FROM students WHERE id=?";
+
+
+        try(Connection conn = DBConnection.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+
+
+            ps.setInt(1,id);
+
+
+            ResultSet rs = ps.executeQuery();
+
+
+            if(rs.next()){
+
+                return new Student(
+
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+
+                );
+            }
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return null;
+
+    }
+
+    //PASSWORD VERIFICATION
+    public boolean checkPassword(int id, String password){
+
+        String sql =
+                "SELECT * FROM students WHERE id=? AND password=?";
+
+
+        try(Connection conn = DBConnection.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+
+
+            ps.setInt(1,id);
+
+            ps.setString(2,password);
+
+
+            ResultSet rs = ps.executeQuery();
+
+
+            return rs.next();
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return false;
+    }
 }
