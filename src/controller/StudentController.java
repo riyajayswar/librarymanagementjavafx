@@ -108,8 +108,6 @@ public class StudentController {
 
     private StudentDAO studentDAO = new StudentDAO();
 
-    private Student currentStudentProfile;
-
     // CURRENT STUDENT
     private String currentStudent;
 
