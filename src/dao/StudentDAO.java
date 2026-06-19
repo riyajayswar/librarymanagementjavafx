@@ -13,7 +13,8 @@ public class StudentDAO {
 
         String sql = "CREATE TABLE IF NOT EXISTS students (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "username TEXT NOT NULL," +
+                "name TEXT NOT NULL," +
+                "email TEXT UNIQUE NOT NULL," +
                 "password TEXT NOT NULL)";
 
         try (Connection conn = DBConnection.connect();
@@ -26,16 +27,20 @@ public class StudentDAO {
         }
     }
 
-    // ADD STUDENT
-    public void addStudent(String username, String password) {
+    // REGISTER STUDENT
+    public void addStudent(String name,
+                           String email,
+                           String password) {
 
-        String sql = "INSERT INTO students(username, password) VALUES(?, ?)";
+        String sql =
+                "INSERT INTO students(name, email, password) VALUES(?, ?, ?)";
 
         try (Connection conn = DBConnection.connect();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
 
             ps.executeUpdate();
 
@@ -44,10 +49,43 @@ public class StudentDAO {
         }
     }
 
+    // LOGIN STUDENT
+    public Student loginStudent(String email,
+                                String password) {
+
+        String sql =
+                "SELECT * FROM students WHERE email=? AND password=?";
+
+        try (Connection conn = DBConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return new Student(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     // GET ALL STUDENTS
     public ObservableList<Student> getAllStudents() {
 
-        ObservableList<Student> list = FXCollections.observableArrayList();
+        ObservableList<Student> list =
+                FXCollections.observableArrayList();
 
         String sql = "SELECT * FROM students";
 
@@ -59,7 +97,8 @@ public class StudentDAO {
 
                 list.add(new Student(
                         rs.getInt("id"),
-                        rs.getString("username"),
+                        rs.getString("name"),
+                        rs.getString("email"),
                         rs.getString("password")
                 ));
             }

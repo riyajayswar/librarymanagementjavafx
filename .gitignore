@@ -1,4 +1,35 @@
-bin/
-out/
+# Database
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Java compiled files
 *.class
-.vscode/settings.json
+
+# Build folders
+target/
+out/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak

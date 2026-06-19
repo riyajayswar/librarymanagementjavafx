@@ -1,97 +1,425 @@
-/* =========================
-   GLOBAL
-========================= */
+/* ROOT */
 
-.root{
-    -fx-font-family:"Segoe UI";
-    -fx-background-color:#f4f7fb;
+.root {
+    -fx-font-family: "Segoe UI";
 }
 
 /* =========================
-   TOP BAR
+   LIGHT MODE
 ========================= */
 
-.top-bar{
-    -fx-background-color:linear-gradient(to right,#2563eb,#1e3a8a);
-    -fx-padding:15;
+.light-mode {
+    -fx-background-color: #f1f5f9;
 }
 
 /* =========================
-   SIDEBAR
+   DARK MODE
 ========================= */
 
-.sidebar{
-    -fx-background-color:#0f172a;
-    -fx-padding:20;
-}
-
-/* =========================
-   TITLES
-========================= */
-
-.title{
-    -fx-text-fill:white;
-    -fx-font-size:24;
-    -fx-font-weight:bold;
-}
-
-.subtitle{
-    -fx-font-size:22;
-    -fx-font-weight:bold;
-    -fx-text-fill:#1e293b;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-
-.button{
-    -fx-background-radius:12;
-    -fx-font-weight:bold;
-    -fx-cursor:hand;
-    -fx-padding:10 15 10 15;
-}
-
-.button:hover{
-    -fx-scale-x:1.03;
-    -fx-scale-y:1.03;
-}
-
-/* =========================
-   TABLE
-========================= */
-
-.table-view{
-    -fx-background-color:white;
-    -fx-background-radius:15;
-    -fx-border-radius:15;
-    -fx-padding:5;
-}
-
-.table-view .column-header{
-    -fx-background-color:#2563eb;
-}
-
-.table-view .column-header .label{
-    -fx-text-fill:white;
-    -fx-font-weight:bold;
-}
-
-/* =========================
-   TEXTFIELDS
-========================= */
-
-.text-field{
-    -fx-background-radius:10;
-    -fx-padding:10;
+.dark-mode {
+    -fx-background-color: #111827;
 }
 
 /* =========================
    LABELS
 ========================= */
 
-.fine-label{
-    -fx-font-size:18;
-    -fx-font-weight:bold;
-    -fx-text-fill:#dc2626;
+.dark-mode .label {
+    -fx-text-fill: white;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian,
+            rgba(0,0,0,0.18),
+            18,0,0,6);
+}
+.dark-mode .dashboard-card {
+    -fx-background-color: #1f2937;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.content-panel {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 25;
+    -fx-effect: dropshadow(gaussian,
+            rgba(0,0,0,0.08),
+            10,0,0,4);
+}
+
+.dark-mode .content-panel {
+    -fx-background-color: #1f2937;
+    -fx-border-color: #334155;
+    -fx-border-radius: 20;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    -fx-background-color: #172033;
+}
+
+.dark-mode .sidebar {
+    -fx-background-color: #111827;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.topbar {
+    -fx-background-color: #0b1220;
+}
+
+.dark-mode .topbar {
+    -fx-background-color: #020617;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.button {
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.dark-mode .button {
+    -fx-text-fill: white;
+}
+
+/* =========================
+   TEXT FIELD
+========================= */
+
+.text-field {
+    -fx-background-radius: 12;
+    -fx-padding: 10;
+}
+
+.dark-mode .text-field {
+    -fx-background-color: #0f172a;
+    -fx-text-fill: white;
+    -fx-border-color: #334155;
+    -fx-border-radius: 12;
+}
+
+/* =========================
+   TABLE VIEW
+========================= */
+
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: #e2e8f0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #334155;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: #334155;
+    -fx-size: 42;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-cell {
+    -fx-alignment: CENTER-LEFT;
+    -fx-text-fill: black;
+    -fx-border-color: transparent;
+}
+
+/* ROW COLORS */
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f8fafc;
+}
+
+/* SELECTION */
+
+.table-row-cell:selected,
+.table-row-cell:filled:selected,
+.table-row-cell:focused:selected,
+.table-row-cell:odd:selected,
+.table-row-cell:even:selected {
+    -fx-background-color: #2563eb;
+}
+
+.table-row-cell:selected .table-cell,
+.table-row-cell:filled:selected .table-cell,
+.table-row-cell:focused:selected .table-cell,
+.table-row-cell:odd:selected .table-cell,
+.table-row-cell:even:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+/* =========================
+   DARK TABLE
+========================= */
+
+.dark-mode .table-view {
+    -fx-background-color: #0f172a;
+    -fx-border-color: #334155;
+}
+
+.dark-mode .table-row-cell {
+    -fx-background-color: #0f172a;
+}
+
+.dark-mode .table-row-cell:odd {
+    -fx-background-color: #111827;
+}
+
+.dark-mode .table-row-cell:selected,
+.dark-mode .table-row-cell:filled:selected,
+.dark-mode .table-row-cell:focused:selected,
+.dark-mode .table-row-cell:odd:selected,
+.dark-mode .table-row-cell:even:selected {
+    -fx-background-color: #2563eb;
+}
+
+.dark-mode .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+.dark-mode .table-cell {
+    -fx-text-fill: white;
+}
+
+.dark-mode .column-header-background {
+    -fx-background-color: #1e293b;
+}
+
+.dark-mode .column-header {
+    -fx-background-color: #1e293b;
+}
+
+.dark-mode .column-header .label {
+    -fx-text-fill: white;
+}
+
+/* =========================
+   SCROLLPANE
+========================= */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* =========================
+   SEPARATOR
+========================= */
+
+.separator .line {
+    -fx-border-color: #475569;
+}
+/* DARK MODE LABEL FIX */
+
+.dark-mode .label {
+    -fx-text-fill: white;
+}
+
+/* DARK MODE TABLE */
+
+.dark-mode .table-view {
+    -fx-background-color: #0f172a;
+}
+
+.dark-mode .table-row-cell {
+    -fx-background-color: #0f172a;
+}
+
+.dark-mode .table-row-cell:odd {
+    -fx-background-color: #111827;
+}
+
+.dark-mode .table-cell {
+    -fx-text-fill: white;
+}
+
+/* DARK MODE CHARTS */
+
+.dark-mode .chart {
+    -fx-background-color: #1e293b;
+}
+
+.dark-mode .chart-plot-background {
+    -fx-background-color: #0f172a;
+}
+
+.dark-mode .axis {
+    -fx-tick-label-fill: white;
+}
+
+.dark-mode .axis-label {
+    -fx-text-fill: white;
+}
+
+.dark-mode .chart-title {
+    -fx-text-fill: white;
+}
+
+/* DARK MODE PANELS */
+
+.dark-mode .content-panel {
+    -fx-background-color: #1e293b;
+}
+
+.dark-mode .dashboard-card {
+    -fx-background-color: #1e293b;
+}
+
+.button:hover {
+    -fx-opacity: 0.9;
+}
+/* =========================
+   DARK MODE HEADINGS
+========================= */
+
+.dark-mode .content-panel .label {
+    -fx-text-fill: white;
+}
+
+.dark-mode .dashboard-card .label {
+    -fx-text-fill: white;
+}
+
+.dark-mode .table-view .label {
+    -fx-text-fill: white;
+}
+/* CARD LABELS IN DARK MODE */
+
+.dark-mode #totalBooksLabel {
+    -fx-text-fill: #3b82f6;
+}
+
+.dark-mode #issuedBooksLabel {
+    -fx-text-fill: #f59e0b;
+}
+
+.dark-mode #availableBooksLabel {
+    -fx-text-fill: #22c55e;
+}
+/* =========================
+   CHARTS DARK MODE
+========================= */
+
+.dark-mode .chart {
+    -fx-background-color: transparent;
+}
+
+.dark-mode .chart-title {
+    -fx-text-fill: white;
+}
+
+.dark-mode .axis-label {
+    -fx-text-fill: white;
+}
+
+.dark-mode .axis {
+    -fx-tick-label-fill: white;
+}
+
+.dark-mode .chart-legend {
+    -fx-background-color: #1e293b;
+}
+
+.dark-mode .chart-legend-item {
+    -fx-text-fill: white;
+}
+
+.dark-mode .default-color0.chart-pie {
+    -fx-pie-color: #f97316;
+}
+
+.dark-mode .default-color1.chart-pie {
+    -fx-pie-color: #f59e0b;
+}
+
+.dark-mode .chart-bar {
+    -fx-bar-fill: #f97316;
+}
+
+.dark-mode .chart-plot-background {
+    -fx-background-color: #0f172a;
+}
+
+.dark-mode .chart-vertical-grid-lines,
+.dark-mode .chart-horizontal-grid-lines {
+    -fx-stroke: #475569;
+}
+
+.dark-mode .axis-tick-mark,
+.dark-mode .axis-minor-tick-mark {
+    -fx-stroke: white;
+}
+/* =========================
+   CHARTS DARK MODE
+========================= */
+
+.dark-mode .chart {
+    -fx-background-color: transparent;
+}
+
+.dark-mode .chart-title {
+    -fx-text-fill: white;
+}
+
+.dark-mode .chart-legend {
+    -fx-background-color: transparent;
+}
+
+.dark-mode .chart-legend-item {
+    -fx-text-fill: white;
+}
+
+.dark-mode .chart-pie-label {
+    -fx-fill: white;
+}
+
+.dark-mode .axis {
+    -fx-tick-label-fill: white;
+}
+
+.dark-mode .axis-label {
+    -fx-text-fill: white;
+}
+
+.dark-mode .chart-vertical-grid-lines,
+.dark-mode .chart-horizontal-grid-lines {
+    -fx-stroke: #475569;
+}
+
+.dark-mode .default-color0.chart-pie-label-line,
+.dark-mode .default-color1.chart-pie-label-line {
+    -fx-stroke: white;
 }

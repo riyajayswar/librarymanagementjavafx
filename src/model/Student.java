@@ -3,12 +3,18 @@ package model;
 public class Student {
 
     private int id;
-    private String username;
+    private String name;
+    private String email;
     private String password;
 
-    public Student(int id, String username, String password) {
+    public Student(int id,
+                   String name,
+                   String email,
+                   String password) {
+
         this.id = id;
-        this.username = username;
+        this.name = name;
+        this.email = email;
         this.password = password;
     }
 
@@ -16,8 +22,12 @@ public class Student {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {

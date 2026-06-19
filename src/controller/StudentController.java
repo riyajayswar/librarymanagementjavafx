@@ -10,11 +10,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Book;
+import model.Issue;
+import session.Session;
 
 public class StudentController {
 
+    // ROOT PANE
+    @FXML
+    private BorderPane rootPane;
+
+    // BOOK TABLE
     @FXML
     private TableView<Book> bookTable;
 
@@ -28,11 +36,38 @@ public class StudentController {
     private TableColumn<Book, String> authorColumn;
 
     @FXML
-    private TableColumn<Book, String> statusColumn;
+    private TableColumn<Book, String> categoryColumn;
 
+    @FXML
+    private TableColumn<Book, Integer> totalQuantityColumn;
+
+    @FXML
+    private TableColumn<Book, Integer> availableQuantityColumn;
+
+    // HISTORY TABLE
+    @FXML
+    private TableView<Issue> historyTable;
+
+    @FXML
+    private TableColumn<Issue, String> historyBookColumn;
+
+    @FXML
+    private TableColumn<Issue, String> issueDateColumn;
+
+    @FXML
+    private TableColumn<Issue, String> dueDateColumn;
+
+    @FXML
+    private TableColumn<Issue, String> returnDateColumn;
+
+    @FXML
+    private TableColumn<Issue, Integer> fineColumn;
+
+    // SEARCH
     @FXML
     private TextField searchField;
 
+    // LABELS
     @FXML
     private Label totalBooksLabel;
 
@@ -45,11 +80,31 @@ public class StudentController {
     @FXML
     private Label fineLabel;
 
+    @FXML
+    private Label pendingFineLabel;
+
+    @FXML
+    private Label overdueBooksLabel;
+
+    // THEME
+    private boolean darkMode = false;
+
+    // DAO
     private BookDAO bookDAO = new BookDAO();
 
+    private IssueDAO issueDAO = new IssueDAO();
+
+    // CURRENT STUDENT
+    private String currentStudent;
+
+    // INITIALIZE
     @FXML
     public void initialize() {
 
+        // SESSION USER
+        currentStudent = Session.getUsername();
+
+        // BOOK TABLE
         idColumn.setCellValueFactory(
                 new PropertyValueFactory<>("id"));
 
@@ -59,14 +114,42 @@ public class StudentController {
         authorColumn.setCellValueFactory(
                 new PropertyValueFactory<>("author"));
 
-        statusColumn.setCellValueFactory(
-                new PropertyValueFactory<>("status"));
+        categoryColumn.setCellValueFactory(
+                new PropertyValueFactory<>("category"));
+
+        totalQuantityColumn.setCellValueFactory(
+                new PropertyValueFactory<>("totalQuantity"));
+
+        availableQuantityColumn.setCellValueFactory(
+                new PropertyValueFactory<>("availableQuantity"));
+
+        // HISTORY TABLE
+        historyBookColumn.setCellValueFactory(
+                new PropertyValueFactory<>("bookTitle"));
+
+        issueDateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("issueDate"));
+
+        dueDateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("dueDate"));
+
+        returnDateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("returnDate"));
+
+        fineColumn.setCellValueFactory(
+                new PropertyValueFactory<>("fine"));
 
         loadBooks();
 
+        loadHistory();
+
         loadDashboardStats();
 
-        fineLabel.setText("₹0");
+        loadPendingFine();
+
+        bookTable.getSelectionModel().setSelectionMode(
+                SelectionMode.SINGLE
+        );
     }
 
     // LOAD BOOKS
@@ -76,6 +159,15 @@ public class StudentController {
                 bookDAO.getAllBooks();
 
         bookTable.setItems(books);
+    }
+
+    // LOAD HISTORY
+    private void loadHistory() {
+
+        ObservableList<Issue> history =
+                issueDAO.getStudentHistory(currentStudent);
+
+        historyTable.setItems(history);
     }
 
     // DASHBOARD STATS
@@ -92,9 +184,13 @@ public class StudentController {
         availableBooksLabel.setText(
                 String.valueOf(
                         bookDAO.getAvailableBooksCount()));
+        overdueBooksLabel.setText(
+                String.valueOf(
+                        issueDAO.getOverdueBooksCount()
+                ));
     }
 
-    // SEARCH
+    // SEARCH BOOKS
     @FXML
     private void handleSearch() {
 
@@ -110,7 +206,8 @@ public class StudentController {
         for (Book book : allBooks) {
 
             if (book.getTitle().toLowerCase().contains(keyword)
-                    || book.getAuthor().toLowerCase().contains(keyword)) {
+                    || book.getAuthor().toLowerCase().contains(keyword)
+                    || book.getCategory().toLowerCase().contains(keyword)) {
 
                 filteredBooks.add(book);
             }
@@ -132,25 +229,35 @@ public class StudentController {
             return;
         }
 
-        if (selectedBook.getStatus().equals("Issued")) {
+        // CHECK AVAILABILITY
+        if (selectedBook.getAvailableQuantity() <= 0) {
 
-            showAlert("Book already issued.");
+            showAlert("Book not available.");
             return;
         }
 
-        bookDAO.issueBook(selectedBook.getId());
+        boolean issued =
+                issueDAO.issueBook(
+                        currentStudent,
+                        selectedBook.getTitle()
+                );
 
-        IssueDAO issueDAO = new IssueDAO();
+        if (issued) {
 
-        issueDAO.issueBook(
-                "student",
-                selectedBook.getTitle());
+            showAlert("Book issued successfully!");
 
-        showAlert("Book issued successfully!");
+        } else {
+
+            showAlert("Issue failed.");
+        }
 
         loadBooks();
 
         loadDashboardStats();
+
+        loadHistory();
+
+        loadPendingFine();
     }
 
     // RETURN BOOK
@@ -166,40 +273,62 @@ public class StudentController {
             return;
         }
 
-        if (selectedBook.getStatus().equals("Available")) {
+        int fine =
+                issueDAO.returnBook(
+                        currentStudent,
+                        selectedBook.getTitle()
+                );
 
-            showAlert("Book already available.");
+        if (fine == -1) {
+
+            showAlert("You have not issued this book.");
             return;
         }
 
-        IssueDAO issueDAO = new IssueDAO();
-
-        int fine =
-                issueDAO.calculateFine(
-                        selectedBook.getTitle());
-
-        bookDAO.returnBook(selectedBook.getId());
-
-        issueDAO.deleteIssuedBook(
-                selectedBook.getTitle());
-
-        fineLabel.setText("₹" + fine);
-
         showAlert(
-                "Book returned successfully!\nFine: ₹" + fine);
+                "Book returned successfully!\nFine: ₹" + fine
+        );
 
         loadBooks();
 
         loadDashboardStats();
 
-        fineLabel.setText("₹0");
+        loadHistory();
+
+        loadPendingFine();
     }
 
-    // SIDEBAR SEARCH
+    // GO TO SEARCH
     @FXML
     private void goToSearch() {
 
         searchField.requestFocus();
+    }
+
+    // TOGGLE THEME
+    @FXML
+    private void toggleTheme() {
+
+        if (darkMode) {
+
+            rootPane.getStyleClass().remove("dark-mode");
+
+            if (!rootPane.getStyleClass().contains("light-mode")) {
+
+                rootPane.getStyleClass().add("light-mode");
+            }
+
+        } else {
+
+            rootPane.getStyleClass().remove("light-mode");
+
+            if (!rootPane.getStyleClass().contains("dark-mode")) {
+
+                rootPane.getStyleClass().add("dark-mode");
+            }
+        }
+
+        darkMode = !darkMode;
     }
 
     // LOGOUT
@@ -207,6 +336,9 @@ public class StudentController {
     private void handleLogout() {
 
         try {
+
+            // CLEAR SESSION
+            Session.clearSession();
 
             Parent root = FXMLLoader.load(
                     getClass().getResource("/view/login.fxml"));
@@ -235,5 +367,15 @@ public class StudentController {
         alert.setContentText(message);
 
         alert.showAndWait();
+    }
+
+    private void loadPendingFine() {
+
+        int fine =
+                issueDAO.getStudentPendingFine(
+                        currentStudent
+                );
+
+        pendingFineLabel.setText("₹" + fine);
     }
 }

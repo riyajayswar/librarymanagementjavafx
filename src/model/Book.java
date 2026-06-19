@@ -1,16 +1,28 @@
 package model;
 
 public class Book {
+
     private int id;
     private String title;
     private String author;
-    private String status;
+    private String category;
 
-    public Book(int id, String title, String author, String status) {
+    private int totalQuantity;
+    private int availableQuantity;
+
+    public Book(int id,
+                String title,
+                String author,
+                String category,
+                int totalQuantity,
+                int availableQuantity) {
+
         this.id = id;
         this.title = title;
         this.author = author;
-        this.status = status;
+        this.category = category;
+        this.totalQuantity = totalQuantity;
+        this.availableQuantity = availableQuantity;
     }
 
     public int getId() {
@@ -25,7 +37,15 @@ public class Book {
         return author;
     }
 
-    public String getStatus() {
-        return status;
+    public String getCategory() {
+        return category;
+    }
+
+    public int getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public int getAvailableQuantity() {
+        return availableQuantity;
     }
 }
