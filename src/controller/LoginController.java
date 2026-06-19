@@ -78,7 +78,8 @@ public class LoginController {
                     // SAVE SESSION
                     Session.setStudent(
                             student.getId(),
-                            student.getName()
+                            student.getName(),
+                            student.getEmail()
                     );
 
                     Parent root = FXMLLoader.load(

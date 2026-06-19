@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.StudentProfileController"
+            prefWidth="600"
+            prefHeight="500">
+
+    <center>
+
+        <VBox spacing="20"
+              alignment="CENTER">
+
+            <Label text="Student Profile"
+                   style="-fx-font-size:30;
+                          -fx-font-weight:bold;"/>
+
+
+            <Label fx:id="nameLabel"
+                   text="Name"/>
+
+
+            <Label fx:id="emailLabel"
+                   text="Email"/>
+
+
+            <Label fx:id="idLabel"
+                   text="Student ID"/>
+
+
+            <Label fx:id="issuedLabel"
+                   text="Books Issued"/>
+
+
+            <Label fx:id="returnedLabel"
+                   text="Books Returned"/>
+
+
+            <Label fx:id="fineLabel"
+                   text="Pending Fine"/>
+
+
+            <Button text="Back"
+                    onAction="#goBack"/>
+
+
+        </VBox>
+
+
+    </center>
+
+
+</BorderPane>

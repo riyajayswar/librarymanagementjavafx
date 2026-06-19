@@ -126,4 +126,82 @@ public class StudentDAO {
             e.printStackTrace();
         }
     }
+    // GET STUDENT PROFILE
+    public Student getStudentProfile(String email) {
+
+        String sql =
+                "SELECT * FROM students WHERE email=?";
+
+        try (Connection conn = DBConnection.connect();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return new Student(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    //student profile
+    public Student getStudentByEmail(String email){
+
+        String sql =
+                "SELECT * FROM students WHERE email=?";
+
+
+        try(Connection conn =
+                DBConnection.connect();
+
+            PreparedStatement ps =
+                conn.prepareStatement(sql)){
+
+
+            ps.setString(1,email);
+
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+
+
+            if(rs.next()){
+
+
+                return new Student(
+
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+
+            }
+
+
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return null;
+
+    }
 }

@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import model.Book;
 import model.Issue;
 import session.Session;
+import model.Student;
+import dao.StudentDAO;
 
 public class StudentController {
 
@@ -86,6 +88,15 @@ public class StudentController {
     @FXML
     private Label overdueBooksLabel;
 
+    @FXML
+    private Label studentIdLabel;
+
+    @FXML
+    private Label studentNameLabel;
+
+    @FXML
+    private Label studentEmailLabel;
+
     // THEME
     private boolean darkMode = false;
 
@@ -93,6 +104,10 @@ public class StudentController {
     private BookDAO bookDAO = new BookDAO();
 
     private IssueDAO issueDAO = new IssueDAO();
+
+    private StudentDAO studentDAO = new StudentDAO();
+
+    private Student currentStudentProfile;
 
     // CURRENT STUDENT
     private String currentStudent;
@@ -103,6 +118,8 @@ public class StudentController {
 
         // SESSION USER
         currentStudent = Session.getUsername();
+
+        loadStudentProfile();
 
         // BOOK TABLE
         idColumn.setCellValueFactory(
@@ -378,4 +395,24 @@ public class StudentController {
 
         pendingFineLabel.setText("₹" + fine);
     }
+
+    // LOAD STUDENT PROFILE
+    private void loadStudentProfile() {
+
+    studentIdLabel.setText(
+            String.valueOf(
+                    Session.getStudentId()
+            )
+    );
+
+
+    studentNameLabel.setText(
+            Session.getUsername()
+    );
+
+
+    studentEmailLabel.setText(
+            Session.getEmail()
+    );
+}
 }
