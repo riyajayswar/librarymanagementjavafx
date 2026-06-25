@@ -365,6 +365,73 @@
 
                      </VBox>
 
+                     <!-- ================= STUDENT MANAGEMENT ================= -->
+
+                     <VBox spacing="20"
+                            styleClass="content-panel">
+
+
+                            <Label text="Student Management"
+                                   style="-fx-font-size:24;
+                                          -fx-font-weight:bold;" />
+
+
+                            <HBox spacing="15">
+
+                                   <TextField fx:id="studentSearchField"
+                                          promptText="Search students..."
+                                          prefWidth="300"/>
+
+
+                                   <Button text="Search"
+                                          onAction="#handleStudentSearch"
+                                          style="-fx-background-color:#2563eb;
+                                                 -fx-text-fill:white;
+                                                 -fx-font-weight:bold;
+                                                 -fx-background-radius:12;"/>
+
+
+                                   <Button text="Delete Selected Student"
+                                          onAction="#handleDeleteStudent"
+                                          style="-fx-background-color:#ef4444;
+                                                 -fx-text-fill:white;
+                                                 -fx-font-weight:bold;
+                                                 -fx-background-radius:12;"/>
+
+                            </HBox>
+
+
+
+                            <TableView fx:id="studentTable"
+                                          prefHeight="300">
+
+
+                                   <columns>
+
+
+                                          <TableColumn fx:id="studentIdColumn"
+                                                        text="ID"
+                                                        prefWidth="100"/>
+
+
+                                          <TableColumn fx:id="studentNameColumn"
+                                                        text="Name"
+                                                        prefWidth="250"/>
+
+
+                                          <TableColumn fx:id="studentEmailColumn"
+                                                        text="Email"
+                                                        prefWidth="350"/>
+
+
+                                   </columns>
+
+
+                     </TableView>
+
+
+                    </VBox>
+                    
                     <!-- ANALYTICS -->
                     <VBox spacing="20"
                           styleClass="content-panel">

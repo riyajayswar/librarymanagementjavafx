@@ -25,6 +25,9 @@ import javafx.stage.Stage;
 
 import model.Book;
 import model.Issue;
+import model.Student;
+
+import dao.StudentDAO;
 
 public class AdminController {
 
@@ -96,6 +99,26 @@ public class AdminController {
     @FXML
     private TableColumn<Issue, Integer> overdueFineColumn;
 
+    // STUDENT TABLE
+
+    @FXML
+    private TableView<Student> studentTable;
+
+
+    @FXML
+    private TableColumn<Student, Integer> studentIdColumn;
+
+
+    @FXML
+    private TableColumn<Student, String> studentNameColumn;
+
+
+    @FXML
+    private TableColumn<Student, String> studentEmailColumn;
+
+    @FXML
+    private TextField studentSearchField;
+
     // CHARTS
     @FXML
     private PieChart bookPieChart;
@@ -138,6 +161,9 @@ public class AdminController {
 
     private IssueDAO issueDAO =
             new IssueDAO();
+
+    private StudentDAO studentDAO = 
+            new StudentDAO();
 
     // INITIALIZE
     @FXML
@@ -246,6 +272,20 @@ public class AdminController {
 
         overdueFineColumn.setCellValueFactory(
                 new PropertyValueFactory<>("fine"));
+        
+        // STUDENT TABLE
+
+        studentIdColumn.setCellValueFactory(
+                new PropertyValueFactory<>("id")
+        );
+
+        studentNameColumn.setCellValueFactory(
+                new PropertyValueFactory<>("name")
+        );
+
+        studentEmailColumn.setCellValueFactory(
+                new PropertyValueFactory<>("email")
+        );
 
         // LOAD DATA
         loadBooks();
@@ -253,6 +293,8 @@ public class AdminController {
         loadIssuedBooks();
 
         loadOverdueBooks();
+
+        loadStudents();
 
         loadDashboardStats();
 
@@ -682,5 +724,82 @@ public class AdminController {
         alert.setContentText(message);
 
         alert.showAndWait();
+    }
+
+    // SEARCH STUDENTS
+    @FXML
+    private void handleStudentSearch(){
+
+        String keyword =
+                studentSearchField.getText().toLowerCase();
+
+
+        ObservableList<Student> allStudents =
+                studentDAO.getAllStudents();
+
+
+        ObservableList<Student> filtered =
+                FXCollections.observableArrayList();
+
+
+        for(Student student : allStudents){
+
+                if(student.getName().toLowerCase().contains(keyword)
+                        || student.getEmail().toLowerCase().contains(keyword)){
+
+
+                filtered.add(student);
+
+                }
+
+        }
+
+
+        studentTable.setItems(filtered);
+
+    }
+
+
+
+    // DELETE STUDENT
+    @FXML
+    private void handleDeleteStudent(){
+
+
+        Student selected =
+                studentTable.getSelectionModel()
+                        .getSelectedItem();
+
+
+        if(selected == null){
+
+                showAlert("Please select a student.");
+
+                return;
+        }
+
+
+
+        studentDAO.deleteStudent(
+                selected.getId()
+        );
+
+
+        showAlert(
+                "Student deleted successfully!"
+        );
+
+
+        loadStudents();
+
+    }
+    //LOAD STUDENTS 
+    private void loadStudents(){
+
+        ObservableList<Student> students =
+                studentDAO.getAllStudents();
+
+        studentTable.setItems(students);
+
     }
 }
