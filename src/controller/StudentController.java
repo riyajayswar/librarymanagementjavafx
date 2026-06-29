@@ -578,7 +578,8 @@ public class StudentController {
                         emailField.getText()
 
                 );
-
+                currentStudent = nameField.getText();
+                
                 loadStudentProfile();
 
 

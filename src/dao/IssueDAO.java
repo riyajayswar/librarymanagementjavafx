@@ -398,9 +398,9 @@ public class IssueDAO {
                 FXCollections.observableArrayList();
 
         String sql =
-                "SELECT * FROM issued_books " +
-                        "WHERE LOWER(student_name)=LOWER(?) " +
-                        "ORDER BY issue_id DESC";
+        "SELECT * FROM issued_books " +
+        "WHERE LOWER(student_name)=LOWER(?) " +
+        "ORDER BY issue_id DESC";
 
         try (Connection conn = DBConnection.connect();
              PreparedStatement ps =

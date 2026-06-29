@@ -204,19 +204,52 @@ public class StudentDAO {
         return null;
 
     }
+    
     // UPDATE STUDENT PROFILE
     public void updateStudent(int id,
-                          String name,
-                          String email,
-                          String password) {
+                            String name,
+                            String email,
+                            String password) {
 
 
-        String sql =
-                "UPDATE students SET name=?, email=?, password=? WHERE id=?";
+        try(Connection conn = DBConnection.connect()) {
 
 
-        try(Connection conn = DBConnection.connect();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+            // GET OLD NAME FIRST
+            String oldName = null;
+
+
+            String getOld =
+                    "SELECT name FROM students WHERE id=?";
+
+
+            PreparedStatement oldPS =
+                    conn.prepareStatement(getOld);
+
+
+            oldPS.setInt(1, id);
+
+
+            ResultSet rs =
+                    oldPS.executeQuery();
+
+
+            if(rs.next()){
+
+                oldName =
+                        rs.getString("name");
+            }
+
+
+
+            // UPDATE STUDENTS TABLE
+
+            String sql =
+                    "UPDATE students SET name=?, email=?, password=? WHERE id=?";
+
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
 
 
             ps.setString(1, name);
@@ -229,6 +262,27 @@ public class StudentDAO {
 
 
             ps.executeUpdate();
+
+
+
+
+            // UPDATE OLD ISSUED BOOK RECORDS NAME
+
+            String issueSQL =
+                    "UPDATE issued_books SET student_name=? WHERE student_name=?";
+
+
+            PreparedStatement issuePS =
+                    conn.prepareStatement(issueSQL);
+
+
+            issuePS.setString(1, name);
+
+            issuePS.setString(2, oldName);
+
+
+            issuePS.executeUpdate();
+
 
 
         }catch(Exception e){
